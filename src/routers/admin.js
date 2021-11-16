@@ -137,7 +137,7 @@ router.get('/delete-blog/:id', auth, async (req, res) => {
 router.get('/view-blog/:id', async (req, res) => {
     try{
         const blog = await Blog.findOne({softDelete: false, _id: req.params.id})
-        await blog.save()
+        if(!blog) return res.status(404).send({message: "Not found"})
         return res.send(blog)
     }catch(e){
         console.log(e)
