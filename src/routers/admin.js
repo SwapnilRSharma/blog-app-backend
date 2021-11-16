@@ -133,5 +133,17 @@ router.get('/delete-blog/:id', auth, async (req, res) => {
     }
 })
 
+//View Blog
+router.get('/view-blog/:id', async (req, res) => {
+    try{
+        const blog = await Blog.findOne({softDelete: false, _id: req.params.id})
+        await blog.save()
+        return res.send(blog)
+    }catch(e){
+        console.log(e)
+        return res.status(400).send(e.message)
+    }
+})
+
 
 module.exports = router
