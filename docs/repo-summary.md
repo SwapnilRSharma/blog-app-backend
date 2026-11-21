@@ -32,7 +32,7 @@ Note: `src/routers/auth.js` exists but is not currently mounted in `app.js`.
 The server is started from `src/app.js`:
 
 1. Loads MongoDB connection by requiring `src/db/mongoose.js` (uses `process.env.MONGODB_URL`).
-2. Creates an Express app, applies `body-parser` and `cors` middleware.
+2. Creates an Express app, applies `cors` and `body-parser` middleware (JSON + URL-encoded).
 3. Mounts routers:
    - `app.use('/user', userRouter)`
    - `app.use('/admin', adminRouter)`
