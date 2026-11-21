@@ -132,3 +132,24 @@ Required environment variables:
 - `MONGODB_URL` — MongoDB connection string used by `src/db/mongoose.js`
 - `JWT_SECRET` — secret used to sign and verify JWTs
 - `PORT` — port the Express app listens on
+
+## Scripts & Configuration
+
+NPM scripts (`package.json`):
+
+- `start`: `node src/app.js` — runs the server using environment variables from the shell
+- `dev`: `env-cmd -f config/dev.env nodemon src/app.js` — watches files and reloads, loading env from `config/dev.env`
+
+Local development setup:
+
+1. Install dependencies: `npm install`
+2. Create `config/dev.env` with the required variables, for example:
+
+   MONGODB_URL=mongodb://127.0.0.1:27017/blog-api
+   JWT_SECRET=replace-with-a-strong-secret
+   PORT=4000
+
+3. Run in dev mode: `npm run dev`
+4. Or run in prod mode (ensure env vars are set): `npm start`
+
+Note: The README references a `Config` folder; scripts use lowercase `config/`. Use `config/dev.env` to match the script path.
