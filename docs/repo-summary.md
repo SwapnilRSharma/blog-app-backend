@@ -94,3 +94,41 @@ Admin routes (`/admin`):
   Auth: JWT (any role)
 - GET `/admin/view-blog/:id` — View a blog by id (public).
   Auth: none
+
+## Data Models
+
+User (`src/models/user.js`):
+
+- name: String, required, trimmed
+- email: String, required, unique, lowercase, validated via `validator.isEmail`
+- password: String, required, min 5, hashed with bcrypt on save
+- user_type: String, required, defaults to `CONTENT_WRITER` (also supports `ADMIN`)
+- softDelete: Boolean, defaults to false
+- timestamps: createdAt, updatedAt
+
+Methods and statics:
+- toJSON: removes `password` from serialized output
+- generateAuthToken: signs `{ _id, user_type }` with `JWT_SECRET`
+- findByCredentials(email, password, user_type): finds user and verifies password
+
+Blog (`src/models/blog.js`):
+
+- title: String, required, trimmed
+- description: String, required, trimmed
+- category: String, required, trimmed
+- isApproved: Boolean, defaults to false
+- owner: ObjectId, required, ref 'Users'
+- softDelete: Boolean, defaults to false
+- timestamps: createdAt, updatedAt
+
+## Authentication
+
+- JWT-based auth using `Authorization: Bearer <token>` header
+- Tokens contain `{ _id, user_type }` and are signed with `process.env.JWT_SECRET`
+- Middleware: `src/middleware/auth.js` verifies the token and loads the user; on success attaches `req.user` and calls `next()`, else responds `401 { error: 'Please authenticate.' }`
+
+Required environment variables:
+
+- `MONGODB_URL` — MongoDB connection string used by `src/db/mongoose.js`
+- `JWT_SECRET` — secret used to sign and verify JWTs
+- `PORT` — port the Express app listens on
