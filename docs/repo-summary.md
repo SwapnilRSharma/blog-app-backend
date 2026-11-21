@@ -153,3 +153,11 @@ Local development setup:
 4. Or run in prod mode (ensure env vars are set): `npm start`
 
 Note: The README references a `Config` folder; scripts use lowercase `config/`. Use `config/dev.env` to match the script path.
+
+## Notable Behaviors & Limitations
+
+- Admin update route applies updates to `req.user` instead of the target user id (`/admin/user/:userId`); likely a logic bug.
+- Destructive actions use `GET` (`/admin/delete-user/:id`, `/admin/delete-blog/:id`); conventional REST would use `DELETE`.
+- `Blog.owner` references `'Users'`; the `User` model name is `'User'`, which may break population.
+- `src/routers/auth.js` is present but not mounted; unused code path.
+- Validation exists on many routes via Joi but not all admin routes validate query/params.
